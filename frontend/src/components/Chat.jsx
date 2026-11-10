@@ -14,8 +14,9 @@ export default function Chat() {
   const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-  // Carrega perfil e utilizadores apenas uma vez ao montar o componente ou quando o token muda
+  // Load profile and users only once on mount or when token changes
   useEffect(() => {
     if (!token) {
       navigate('/login');
@@ -25,7 +26,7 @@ export default function Chat() {
     fetchUsers();
   }, [token]);
 
-  // Procura as mensagens apenas quando o ID do utilizador selecionado mudar
+  // Fetch messages only when selected user ID changes
   useEffect(() => {
     if (selectedUser?.id) {
       fetchMessages(selectedUser.id);
@@ -34,7 +35,7 @@ export default function Chat() {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/users/me', {
+      const response = await fetch(`${API_URL}/api/users/me`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -51,7 +52,7 @@ export default function Chat() {
   const handleUpdateBio = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/users/profile', {
+      const response = await fetch(`${API_URL}/api/users/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ export default function Chat() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/users', {
+      const response = await fetch(`${API_URL}/api/users`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -90,7 +91,7 @@ export default function Chat() {
 
   const fetchMessages = async (recipientId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/messages/${recipientId}`, {
+      const response = await fetch(`${API_URL}/api/messages/${recipientId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -108,7 +109,7 @@ export default function Chat() {
     if (!newMessage.trim() || !selectedUser) return;
 
     try {
-      const response = await fetch('http://localhost:5000/api/messages', {
+      const response = await fetch(`${API_URL}/api/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
