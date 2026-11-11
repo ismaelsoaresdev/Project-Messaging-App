@@ -61,13 +61,13 @@ router.post('/login', async (req, res) => {
     // Find user by email
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      return res.status(400).json({ error: 'Invalid email or password.' });
+      return res.status(401).json({ error: 'Invalid email or password.' });
     }
 
     // Validate password
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
-      return res.status(400).json({ error: 'Invalid email or password.' });
+      return res.status(401).json({ error: 'Invalid email or password.' });
     }
 
     // Generate JWT token
