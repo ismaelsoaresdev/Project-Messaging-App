@@ -139,7 +139,7 @@ export default function Chat() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    navigate('/login');
+    window.location.replace('/login');
   };
 
   return (
